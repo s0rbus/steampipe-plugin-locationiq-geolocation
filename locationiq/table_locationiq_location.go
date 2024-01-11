@@ -2,7 +2,9 @@ package locationiq
 
 import (
 	"context"
+	"strconv"
 
+	liq "github.com/location-iq/locationiq-go-client"
 	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
 )
@@ -41,13 +43,35 @@ func tableLocationIQLocation() *plugin.Table {
 func getLocation(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	token := GetToken(ctx, d)
 	plugin.Logger(ctx).Info("getting api token", "value", token)
+	authContext := GetAuth(ctx, token)
+	liqconfig := liq.NewConfiguration()
+	//liqconfig.
+	client := liq.NewAPIClient(liqconfig)
+	loc, resp, err := client.SearchApi.Search(authContext, "Martlesham", "JSON", 1, nil)
+	if err != nil {
+		plugin.Logger(ctx).Error("getting location", "err", err)
+		return nil, err
+	}
+	plugin.Logger(ctx).Info("getting location", "resp status", resp.Status)
+	plugin.Logger(ctx).Info("getting location", "locs len", len(loc))
+
 	type Row struct {
 		Lat  float64
 		Long float64
 	}
-	d.StreamListItem(ctx, Row{
-		Lat:  1.2,
-		Long: 3.4,
-	})
+	for i, l := range loc {
+		lat, laterr := strconv.ParseFloat(l.Lat, 64)
+		lng, lngerr := strconv.ParseFloat(l.Lon, 64)
+		if laterr != nil || lngerr != nil {
+			plugin.Logger(ctx).Error("getting loc", "lat parse error", laterr, "lng parse error", lngerr)
+			continue
+		}
+		plugin.Logger(ctx).Info("getting location", "idx", i, "display name", l.DisplayName)
+		d.StreamListItem(ctx, Row{
+			Lat:  lat,
+			Long: lng,
+		})
+	}
+
 	return nil, nil
 }

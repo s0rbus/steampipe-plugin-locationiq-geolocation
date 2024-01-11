@@ -20,8 +20,15 @@ func GetToken(ctx context.Context, d *plugin.QueryData) string {
 	if token == "" {
 		plugin.Logger(ctx).Error("token must be set somewhere")
 	}
-	liqconfig := liq.NewConfiguration()
-	plugin.Logger(ctx).Info("liq config", "value", liqconfig)
+	//liqconfig := liq.NewConfiguration()
+	//plugin.Logger(ctx).Info("liq config", "value", liqconfig)
 
 	return token
+}
+
+func GetAuth(ctx context.Context, token string) context.Context {
+	auth := context.WithValue(context.Background(), liq.ContextAPIKey, liq.APIKey{
+		Key: token,
+	})
+	return auth
 }
