@@ -7,7 +7,7 @@ require (
 	github.com/turbot/steampipe-plugin-sdk/v5 v5.8.0
 )
 
-require github.com/antihax/optional v1.0.0 // indirect
+require github.com/antihax/optional v1.0.0
 
 require (
 	cloud.google.com/go v0.110.7 // indirect
