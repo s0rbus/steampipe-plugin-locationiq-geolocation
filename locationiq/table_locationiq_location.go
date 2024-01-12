@@ -91,6 +91,7 @@ func getLocation(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 	var resp *http.Response
 	opts := &liq.SearchOpts{
 		Matchquality: optional.NewInt32(1),
+		Limit:        optional.NewInt32(1),
 	}
 	if pquery != "" {
 		loc, resp, err = service.Search(authContext, pquery, "JSON", 1, opts)
