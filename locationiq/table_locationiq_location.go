@@ -79,12 +79,11 @@ func tableLocationIQLocation() *plugin.Table {
 }
 
 func getLocation(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
-	token, err := GetToken(ctx, d)
+	liqAdminData, err := NewAdminData(ctx, d)
 	if err != nil {
 		return nil, err
 	}
-	authContext := GetAuthContext(ctx, token)
-	service := GetSearchService(ctx, token)
+	service := liqAdminData.GetSearchService(ctx, liqAdminData.Token)
 	pquery := d.EqualsQuals["placequery"].GetStringValue()
 	pcquery := d.EqualsQuals["postcodequery"].GetStringValue()
 	var loc []liq.Location
@@ -94,9 +93,9 @@ func getLocation(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 		Limit:        optional.NewInt32(1),
 	}
 	if pquery != "" {
-		loc, resp, err = service.Search(authContext, pquery, "JSON", 1, opts)
+		loc, resp, err = service.Search(liqAdminData.AuthContext, pquery, "JSON", 1, opts)
 	} else if pcquery != "" {
-		loc, resp, err = service.Search(authContext, pcquery, "JSON", 1, opts)
+		loc, resp, err = service.Search(liqAdminData.AuthContext, pcquery, "JSON", 1, opts)
 	} else {
 		return nil, fmt.Errorf("no query params")
 	}
