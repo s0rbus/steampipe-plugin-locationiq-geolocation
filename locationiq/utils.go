@@ -70,6 +70,10 @@ func (ad AdminData) GetSearchService(ctx context.Context, token string) *liq.Sea
 	return ad.Client.SearchApi
 }
 
+func (ad AdminData) GetReverseSearchService(ctx context.Context, token string) *liq.ReverseApiService {
+	return ad.Client.ReverseApi
+}
+
 func (ad AdminData) GetBalance(ctx context.Context, token string) (liq.Balance, error) {
 	bs := ad.Client.BalanceApi
 	b, r, err := bs.Balance(ctx)

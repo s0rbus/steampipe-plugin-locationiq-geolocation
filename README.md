@@ -38,14 +38,47 @@ Run a query:
 
 ```sql
 select
-    address,
-    lat,
-    long
+    address
 from
-    locationiq_location
+    locationiq_place2latlong
 where
     placequery = 'Trafalgar Square, London';
 ```
+
+```
++---------------------------------------------------------------------------------------------------------+
+| address                                                                                                 |
++---------------------------------------------------------------------------------------------------------+
+| Trafalgar Square, Seven Dials, Covent Garden, London, Greater London, England, SW1Y 5BJ, United Kingdom |
++---------------------------------------------------------------------------------------------------------+
+
+```
+
+Or a reverse search:
+
+```sql
+select
+    address,
+    postcode,
+    distance
+from
+    locationiq_latlong2place
+where
+    latitude = 51.5053
+and
+    longitude = -0.0755;
+```
+
+```
+(some of the address has been snipped for clarity)
++-------------------------------------------------------------------------------------------------------+----------+----------+
+| address                                                                                               | postcode | distance |
++-------------------------------------------------------------------------------------------------------+----------+----------+
+| Tower Bridge, Horsleydown Old Stairs, Butler's Wharf, Bermondsey, London Borough of Southwark, London | SE1 2LY  | 25       |
++-------------------------------------------------------------------------------------------------------+----------+----------+
+
+```
+
 You can also retrieve your request balance:
 
 ```sql

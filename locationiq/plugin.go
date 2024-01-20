@@ -15,8 +15,9 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 		},
 		DefaultTransform: transform.FromGo().NullIfZero(),
 		TableMap: map[string]*plugin.Table{
-			"locationiq_location": tableLocationIQLocation(),
-			"locationiq_balance":  tableLocationIQBalance(),
+			"locationiq_place2latlong": tableLocationIQPlace2Latlong(),
+			"locationiq_latlong2place": tableLocationIQLatlong2place(),
+			"locationiq_balance":       tableLocationIQBalance(),
 		},
 	}
 	return p

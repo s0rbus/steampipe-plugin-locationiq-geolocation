@@ -13,16 +13,16 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
-func tableLocationIQLocation() *plugin.Table {
+func tableLocationIQPlace2Latlong() *plugin.Table {
 	return &plugin.Table{
-		Name:        "locationiq_location",
+		Name:        "locationiq_place2latlong",
 		Description: "Get lat/long from place name",
 		List: &plugin.ListConfig{
 			KeyColumns: plugin.KeyColumnSlice{
 				{Name: "placequery", Require: plugin.Optional, Operators: []string{"="}},
 				{Name: "postcodequery", Require: plugin.Optional, Operators: []string{"="}},
 			},
-			Hydrate: getLocation,
+			Hydrate: getLatLong,
 		},
 		Columns: []*plugin.Column{
 			{
@@ -56,13 +56,13 @@ func tableLocationIQLocation() *plugin.Table {
 				Description: "the postcode",
 			},
 			{
-				Name:        "lat",
+				Name:        "latitude",
 				Type:        proto.ColumnType_DOUBLE,
 				Transform:   transform.FromField("Lat"),
 				Description: "latitude",
 			},
 			{
-				Name:        "long",
+				Name:        "longitude",
 				Type:        proto.ColumnType_DOUBLE,
 				Transform:   transform.FromField("Long"),
 				Description: "longitude",
@@ -78,7 +78,7 @@ func tableLocationIQLocation() *plugin.Table {
 
 }
 
-func getLocation(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
+func getLatLong(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
 	liqAdminData, err := NewAdminData(ctx, d)
 	if err != nil {
 		return nil, err
