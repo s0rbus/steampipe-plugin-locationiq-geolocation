@@ -38,8 +38,8 @@ Run a query:
 
 ```sql
 select
-    lat,
-    long
+    latitude,
+    longitude
 from
     locationiq_place2latlong
 where
@@ -48,7 +48,7 @@ where
 
 ```
 +-----------+----------------------+
-| lat       | long                 |
+| latitude  | longitude            |
 +-----------+----------------------+
 | 51.508037 | -0.12804941070724718 |
 +-----------+----------------------+
