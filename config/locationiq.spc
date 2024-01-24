@@ -1,6 +1,6 @@
 connection "locationiq" {
-    plugin    = "local/locationiq"
-    # locationiq api token obtained when registered with locationiq, see their website
+    plugin    = "s0rbus/locationiq"
+    # locationiq api token obtained when registered with locationiq, see docs or their website
     # token = ""
 }
 
